@@ -94,7 +94,7 @@ import (
 	authzv1 "github.com/gh1st/protoc-gen-authorize/gen/authz/v1"
 )
 
-func NewAuthorizer() (map[string]*authzv1.AuthOptions, error) {
+func NewAuthorizer() map[string]*authzv1.AuthOptions {
 	return map[string]*authzv1.AuthOptions{
 	{{- range $key, $value := .Rules }}
 		{{$key}}: {
@@ -106,6 +106,6 @@ func NewAuthorizer() (map[string]*authzv1.AuthOptions, error) {
 			},
 		},
 	{{- end }}
-	}, nil
+	}
 }
 `

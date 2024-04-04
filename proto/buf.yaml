@@ -1,5 +1,5 @@
 version: v1
-name: buf.build/gh1st/authz
+name: buf.build/gh0st/authorize
 deps:
   - buf.build/googleapis/googleapis
 breaking:
