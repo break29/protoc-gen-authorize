@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package example.v1;
+
+import "authz/v1/authz.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/gh1st/protoc-gen-authorize/gen/example/v1;examplev1";
+
+// Request is an example of a request object that would be passed into the authorize rules
+message Request {
+  string account_id = 1;
+  string message = 2;
+}
+
+// User is an example of a user object that would be passed into the authorize rules
+message User {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  repeated string account_ids = 4;
+  repeated string roles = 5;
+  bool is_super_admin = 6;
+}
+
+// Example service is an example of how to use the authorize rules
+service ExampleService {
+  // RequestMatch - Only super admins OR users with the admin role and access to the account id in the request will be allowed
+  rpc RequestMatch(Request) returns (google.protobuf.Empty) {
+    option (authz.v1.auth_options) = {
+      required_roles: [
+        ROLE_SUPER,
+        ROLE_ADMIN
+      ]
+    };
+  }
+  // MetadataMatch - Only super admins OR users with the admin role and access to the account id in the metadata will be allowed
+  rpc MetadataMatch(Request) returns (google.protobuf.Empty) {
+    option (authz.v1.auth_options) = {
+      required_roles: [
+        ROLE_SUPER,
+        ROLE_ADMIN,
+        ROLE_EDITOR
+      ]
+    };
+  }
+  // AllowAll is an example of how to configure a method to allow all requests
+  rpc AllowAll(Request) returns (google.protobuf.Empty) {}
+}

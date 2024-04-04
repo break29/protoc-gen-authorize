@@ -1,0 +1,8 @@
+version: v1
+name: buf.build/gh1st/authz
+deps:
+  - buf.build/googleapis/googleapis
+breaking:
+  ignore_unstable_packages: true
+lint:
+  allow_comment_ignores: true
