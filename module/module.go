@@ -97,7 +97,7 @@ import (
 func NewAuthorizer() (map[string]*authzv1.AuthOptions, error) {
 	return map[string]*authzv1.AuthOptions{
 	{{- range $key, $value := .Rules }}
-		{{$key}}: &authzv1.AuthOptions {
+		{{$key}}: {
 			Public: {{ $value.Public }},
 			RequiredRoles: []authzv1.Role {
 			{{- range $value.RequiredRoles }}
