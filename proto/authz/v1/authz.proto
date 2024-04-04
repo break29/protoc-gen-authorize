@@ -11,7 +11,7 @@ extend google.protobuf.MethodOptions {
 }
 
 message AuthOptions {
-  bool authenticated = 1;
+  bool public = 1;
   // required_role is the list of roles.
   // User must have at least one of the roles to access the method.
   repeated Role required_roles = 2;
@@ -19,7 +19,7 @@ message AuthOptions {
 
 enum Role {
   ROLE_UNSPECIFIED = 0;
-  ROLE_SUPER = 1;
+  ROLE_USER = 1;
   ROLE_ADMIN = 2;
   ROLE_EDITOR = 3;
   ROLE_VIEWER = 4;

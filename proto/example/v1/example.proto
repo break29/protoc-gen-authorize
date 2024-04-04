@@ -29,17 +29,13 @@ service ExampleService {
   // RequestMatch - Only super admins OR users with the admin role and access to the account id in the request will be allowed
   rpc RequestMatch(Request) returns (google.protobuf.Empty) {
     option (authz.v1.auth_options) = {
-      required_roles: [
-        ROLE_SUPER,
-        ROLE_ADMIN
-      ]
+      required_roles: [ROLE_ADMIN]
     };
   }
   // MetadataMatch - Only super admins OR users with the admin role and access to the account id in the metadata will be allowed
   rpc MetadataMatch(Request) returns (google.protobuf.Empty) {
     option (authz.v1.auth_options) = {
       required_roles: [
-        ROLE_SUPER,
         ROLE_ADMIN,
         ROLE_EDITOR
       ]

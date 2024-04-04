@@ -90,13 +90,20 @@ type templateData struct {
 var tmpl = `
 package {{ .Package }}
 
-func NewAuthorizer() (map[string][]string, error) {
-	return map[string][]string{
+import (
+	authzv1 "github.com/gh1st/protoc-gen-authorize/gen/authz/v1"
+)
+
+func NewAuthorizer() (map[string]*authzv1.AuthOptions, error) {
+	return map[string]*authzv1.AuthOptions{
 	{{- range $key, $value := .Rules }}
-		{{$key}}: {
+		{{$key}}: &authzv1.AuthOptions {
+			Public: {{ $value.Public }},
+			RequiredRoles: []authzv1.Role {
 			{{- range $value.RequiredRoles }}
-				"{{ . }}",
+				authzv1.NewRole("{{ . }}"),
 			{{- end }}
+			},
 		},
 	{{- end }}
 	}, nil
