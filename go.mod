@@ -2,7 +2,10 @@ module github.com/gh1st/protoc-gen-authorize
 
 go 1.22
 
-require github.com/lyft/protoc-gen-star v0.6.2
+require (
+	github.com/lyft/protoc-gen-star v0.6.2
+	google.golang.org/protobuf v1.33.0
+)
 
 require (
 	github.com/golang/protobuf v1.5.2 // indirect
@@ -11,5 +14,4 @@ require (
 	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.12 // indirect
-	google.golang.org/protobuf v1.26.0 // indirect
 )
