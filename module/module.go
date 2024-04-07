@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
-	"strings"
 
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
@@ -16,7 +15,7 @@ type module struct {
 	*pgs.ModuleBase
 	pgsgo.Context
 
-	authorizer string
+	importPrefix string
 }
 
 func New() pgs.Module {
@@ -30,7 +29,12 @@ func (m *module) Name() string {
 func (m *module) InitContext(c pgs.BuildContext) {
 	m.ModuleBase.InitContext(c)
 	m.Context = pgsgo.InitContext(c.Parameters())
-	m.authorizer = strings.ToLower(m.authorizer)
+
+	params := c.Parameters()
+	m.importPrefix = params.Str("import_prefix")
+	if m.importPrefix == "" {
+		m.importPrefix = "github.com/gh1st/protoc-gen-authorize/gen"
+	}
 }
 
 func (m *module) Execute(targets map[string]pgs.File, packages map[string]pgs.Package) []pgs.Artifact {
@@ -73,8 +77,9 @@ func (m *module) generate(f pgs.File) {
 
 	buffer := &bytes.Buffer{}
 	if err := t.Execute(buffer, templateData{
-		Package: m.Context.PackageName(f).String(),
-		Rules:   rules,
+		Package:      m.Context.PackageName(f).String(),
+		ImportPrefix: m.importPrefix,
+		Rules:        rules,
 	}); err != nil {
 		m.AddError(err.Error())
 		return
@@ -83,15 +88,16 @@ func (m *module) generate(f pgs.File) {
 }
 
 type templateData struct {
-	Package string
-	Rules   map[string]*authzv1.AuthOptions
+	Package      string
+	ImportPrefix string
+	Rules        map[string]*authzv1.AuthOptions
 }
 
 var tmpl = `
 package {{ .Package }}
 
 import (
-	authzv1 "github.com/gh1st/protoc-gen-authorize/gen/authz/v1"
+	authzv1 "{{ .ImportPrefix }}/authz/v1"
 )
 
 func NewAuthorizer() map[string]*authzv1.AuthOptions {

@@ -4,7 +4,6 @@ package example.v1;
 
 import "authz/v1/authz.proto";
 import "google/protobuf/empty.proto";
-import "google/protobuf/struct.proto";
 
 option go_package = "github.com/gh1st/protoc-gen-authorize/gen/example/v1;examplev1";
 
